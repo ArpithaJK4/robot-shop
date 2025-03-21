@@ -14,9 +14,9 @@ spec:
       labels:
         service: cart
     spec:
-      {{ if .Values.psp.enabled }}
+      {{- if .Values.psp.enabled }}
       serviceAccountName: robot-shop
-      {{ end }}
+      {{- end }}
       containers:
       - name: cart
         image: {{ .Values.image.repo }}/rs-cart:{{ .Values.image.version }}
@@ -28,7 +28,7 @@ spec:
               fieldRef:
                 fieldPath: status.hostIP
         ports:
-        - containerPort: 8080
+          - containerPort: 8080
         resources:
           limits:
             cpu: 200m
@@ -37,14 +37,14 @@ spec:
             cpu: 100m
             memory: 50Mi
       {{- with .Values.cart.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
+        affinity:
+          {{- toYaml . | nindent 10 }}
       {{- end }}
       {{- with .Values.cart.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
+        nodeSelector:
+          {{- toYaml . | nindent 10 }}
       {{- end }}
       {{- with .Values.cart.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
+        tolerations:
+          {{- toYaml . | nindent 10 }}
       {{- end }}
