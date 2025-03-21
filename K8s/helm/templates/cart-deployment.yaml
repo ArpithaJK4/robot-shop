@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,33 +19,32 @@ spec:
       serviceAccountName: robot-shop
       {{- end }}
       containers:
-      - name: cart
-        image: {{ .Values.image.repo }}/rs-cart:{{ .Values.image.version }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        # agent networking access
-        env:
-          - name: INSTANA_AGENT_HOST
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
-        ports:
-          - containerPort: 8080
-        resources:
-          limits:
-            cpu: 200m
-            memory: 100Mi
-          requests:
-            cpu: 100m
-            memory: 50Mi
+        - name: cart
+          image: "{{ .Values.image.repo }}/rs-cart:{{ .Values.image.version }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          env:
+            - name: INSTANA_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 200m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 50Mi
       {{- with .Values.cart.affinity }}
-        affinity:
-          {{- toYaml . | nindent 10 }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.cart.nodeSelector }}
-        nodeSelector:
-          {{- toYaml . | nindent 10 }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.cart.tolerations }}
-        tolerations:
-          {{- toYaml . | nindent 10 }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
